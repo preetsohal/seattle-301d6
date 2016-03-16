@@ -95,6 +95,7 @@
     webDB.execute('SELECT * FROM articles', function(rows) {
       if (rows.length) {
         Article.loadAll(rows);
+        next();
         // Now instanitate those rows with the .loadAll function, and pass control to the view.
 
       } else {
@@ -107,7 +108,9 @@
 
           });
           // Now get ALL the records out the DB, with their database IDs:
-          webDB.execute('', function(rows) {
+          webDB.execute('SELECT * FROM articles', function(rows) {
+            article.loadAll(rows);
+            next();
             // Now instanitate those rows with the .loadAll function, and pass control to the view.
 
           });
