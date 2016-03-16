@@ -19,10 +19,10 @@
     return template(this);
   };
 
-  // TODO: Set up a DB table for articles.
+  // DONE: Set up a DB table for articles.
   Article.createTable = function(callback) {
     webDB.execute(
-      '...',
+      'CREATE TABLE IF NOT EXISTS articles (title varchar, author varchar )',
       function(result) {
         console.log('Successfully set up the articles table.', result);
         if (callback) callback();
@@ -33,8 +33,11 @@
   // TODO: Correct the SQL to delete all records from the articles table.
   Article.truncateTable = function(callback) {
     webDB.execute(
-      'DELETE ...;',
-      callback
+      'DELETE FROM articles WHERE authors;',
+   function(result){
+      console.log("success");
+      if (callback) callback();
+    }
     );
   };
 
