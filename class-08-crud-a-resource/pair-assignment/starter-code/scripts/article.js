@@ -22,7 +22,7 @@
   // DONE: Set up a DB table for articles.
   Article.createTable = function(callback) {
     webDB.execute(
-      'CREATE TABLE IF NOT EXISTS articles (title varchar, author varchar )',
+      'CREATE TABLE IF NOT EXISTS articles (title varchar, category varchar, author varchar, authorUrl varchar, publishedOn varchar, body varchar)',
       function(result) {
         console.log('Successfully set up the articles table.', result);
         if (callback) callback();
@@ -33,7 +33,7 @@
   // TODO: Correct the SQL to delete all records from the articles table.
   Article.truncateTable = function(callback) {
     webDB.execute(
-      'DELETE FROM articles WHERE authors;',
+      'DELETE FROM articles WHERE author;',
    function(result){
       console.log("success");
       if (callback) callback();
@@ -47,8 +47,8 @@
     webDB.execute(
       [
         {
-          'sql': '...;',
-          'data': [],
+          'sql': 'INSERT INTO articles (title, category, author, authorUrl, publishedOn, body) VALUES (?, ?, ?, ?, ?, ?);',
+          'data': [this.title, this.category, this.author, this.authorUrl, this.publishedOn, this.body],
         }
       ],
       callback
@@ -60,7 +60,8 @@
     webDB.execute(
       [
         {
-          /* ... */
+          'sql': 'DELETE FROM articles WHERE (title)',
+          'data': [this.title],
         }
       ],
       callback
@@ -71,7 +72,10 @@
   Article.prototype.updateRecord = function(callback) {
     webDB.execute(
       [
-        /* ... */
+        {
+        'sql': 'UPDATE articles SET title = "testing" WHERE title = "test1"',
+        'data': [this.title],
+        }
       ],
       callback
     );
@@ -88,8 +92,9 @@
   // we need to retrieve the JSON and process it.
   // If the DB has data already, we'll load up the data (sorted!), and then hand off control to the View.
   Article.fetchAll = function(next) {
-    webDB.execute('', function(rows) {
+    webDB.execute('SELECT * FROM articles', function(rows) {
       if (rows.length) {
+        Article.loadAll(rows);
         // Now instanitate those rows with the .loadAll function, and pass control to the view.
 
       } else {
@@ -98,6 +103,7 @@
           rawData.forEach(function(item) {
             var article = new Article(item); // Instantiate an article based on item from JSON
             // Cache the newly-instantiated article in DB:
+            article.insertRecord();
 
           });
           // Now get ALL the records out the DB, with their database IDs:
