@@ -26,30 +26,29 @@
 
     Article.findWhere('author', ctx.params.authorName.replace('+', ' '), authorData);//this levrages webdb to find the articles with matchng author and runs the callback function authorData passing in the matching results as a argument.
   };
-  };
 
-  // COMMENT: What does this method do?  What is it's execution path?
-  articlesController.loadByCategory = function(ctx, next) {
-    var categoryData = function(articlesInCategory) {
+  // DONE: What does this method do?  What is it's execution path?
+  articlesController.loadByCategory = function(ctx, next) {//this is designed to be a callback function for page()
+    var categoryData = function(articlesInCategory) {//function that defines the articles property of the ctx object and assigns the value passed through the parameter. Then calls the next callback on the page().
       ctx.articles = articlesInCategory;
       next();
     };
 
     Article.findWhere('category', ctx.params.categoryName, categoryData);
-  };
+  };//this levrages webdb to find the articles with matching category and runs the callback function authorData passing in the matching results as an argument.
 
-  // COMMENT: What does this method do?  What is it's execution path?
-  articlesController.loadAll = function(ctx, next) {
-    var articleData = function(allArticles) {
+  // DONE: What does this method do?  What is it's execution path?
+  articlesController.loadAll = function(ctx, next) {//this is designed to be a callback function for page()
+    var articleData = function(allArticles) {//function that defines the articles property of the ctx object and assigns the value of Article.all whic is an array of objects
       ctx.articles = Article.all;
       next();
     };
 
     if (Article.all.length) {
-      ctx.articles = Article.all;
-      next();
-    } else {
-      Article.fetchAll(articleData);
+      ctx.articles = Article.all; // if there are articles in Article.all set the articles parameter on the ctx object to the array.
+      next(); // call next callback function in page()
+    } else { // if there aren't any articles
+      Article.fetchAll(articleData); // run article fetch all which will grab all the article data from the database if available, if not available it will populate the database data by an AJAX call to a json object.
     }
   };
 

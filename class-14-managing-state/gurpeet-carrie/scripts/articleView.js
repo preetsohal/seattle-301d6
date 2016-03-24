@@ -37,9 +37,9 @@
     });
   };
 
-  // COMMENT: What does this method do?  What is it's execution path?
+  // DONE: What does this method do?  What is it's execution path?
   articleView.handleFilters = function() {
-    $('#filters').one('change', 'select', function() { // o the first change of filter select run this function and then unbined after its first invocation.
+    $('#filters').one('change', 'select', function() { // do the first change of filter select run this function and then unbined after its first invocation.
       resource = this.id.replace('-filter', ''); // this tells whether author or category filters been interacted with.
       page('/' + resource + '/' + $(this).val().replace(/\W+/g, '+')); // Replace any/all whitespace with a +
     }); //it buids the url  replacing spaces with plus (example:- /author/kenna+morar).
@@ -117,18 +117,18 @@
     $('#article-json').val(JSON.stringify(article) + ',');
   };
 
-  // COMMENT: What does this method do?  What is it's execution path?
-  articleView.index = function(articles) {
-    $('#articles').show().siblings().hide();
+  // DONE: What does this method do?  What is it's execution path?
+  articleView.index = function(articles) {//this function is designed to accept an array as the articles parameter
+    $('#articles').show().siblings().hide(); // this targets element with ID of articles and shows it at the same time it hides all sibling elements.
 
-    $('#articles article').remove();
+    $('#articles article').remove(); //this removes all child article elements from element with the id articles.
     articles.forEach(function(a) {
-      $('#articles').append(render(a));
+      $('#articles').append(render(a));// for each element within the array that was passed when the ArticleView.index function was called. Append ther result of running the render function with the item as an argument. This compiles hanldebars template and returns a rendered HTML element with data gathered from the item.
     });
 
-    articleView.populateFilters();
-    // COMMENT: What does this method do?  What is it's execution path?
-    articleView.handleFilters();
+    articleView.populateFilters(); // this invokes the populateFilters function which you can see the comments on that function for more detail. It will fill in the author and category filters with options.
+    // DONE: What does this method do?  What is it's execution path?
+    articleView.handleFilters(); // this invokes the handleFilters function which you can see the comments on that function for more detail. It handles interaction with the filters. Changing the visible content on the page as different options are selected from the author and category filters.
 
     // DONE: Replace setTeasers with just the truncation logic, if needed:
     if ($('#articles article').length > 1) {
